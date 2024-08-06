@@ -57,7 +57,13 @@ class InputFilter:
     allow: bool = field(default=True)
     replacement_string: str = field(default="")
 
+    def validate_input(self, char):
+        pattern = re.compile(self.regex_string)
+        return bool(pattern.match(char))
 
+    def filter_input(self, input_string):
+        return ''.join(filter(lambda x: self.validate_input(x), input_string))
+        
 class NumbersOnlyInputFilter(InputFilter):
     def __init__(self):
         super().__init__(regex_string=r"[0-9]")
